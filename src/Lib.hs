@@ -18,3 +18,4 @@ greet name = "Hello, " ++ name ++ "!"
 
 greet2 :: String -> String -> String
 greet2 name timeOfDay = "Good " ++ timeOfDay ++ " " ++ name ++ "!"
+

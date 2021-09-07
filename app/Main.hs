@@ -1,9 +1,9 @@
 module Main where
 
+import Data.List (intercalate)
 import Lib
 
-main :: IO ()
-main =
-  print (sumUpTo 5)
-    >> putStrLn (greet "Wouter")
-    >> putStrLn (greet2 "Wouter" "Morning")
+-- main :: IO ()
+-- main = putStrLn "Use 'stack ghci` to interactively call any of the functions."
+
+main = interact (intercalate " / " . map reverse . lines)
