@@ -26,13 +26,35 @@ library:
   source-dirs: src
 
 executables:
-  UU-INFOFP-exe:
+  000-Main:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    dependencies:
+    - UU-INFOFP
+
+  Assignment0:
+    main:                Assignment0.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -main-is Assignment0
+    dependencies:
+    - UU-INFOFP
+
+  Assignment1:
+    main:                Assignment1.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -main-is Assignment1
     dependencies:
     - UU-INFOFP
 
