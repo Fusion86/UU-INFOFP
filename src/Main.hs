@@ -1,5 +1,5 @@
 module Main where
 
 main = do
-    putStrLn "Use 'stack run AssignmentX' to run assignment number X."
-    putStrLn "E.g. 'stack run Assignment1'"
+    putStrLn "Use './run_assignment.sh X' to run assignment number X."
+    putStrLn "E.g. './run_assignment.sh 1'"
