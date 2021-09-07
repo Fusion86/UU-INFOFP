@@ -28,43 +28,26 @@ library:
 executables:
   000-Main:
     main:                Main.hs
-    source-dirs:         app
+    source-dirs:         src
     ghc-options:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
-    dependencies:
-    - UU-INFOFP
 
   Assignment0:
     main:                Assignment0.hs
-    source-dirs:         app
+    source-dirs:         src
     ghc-options:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
     - -main-is Assignment0
-    dependencies:
-    - UU-INFOFP
 
   Assignment1:
     main:                Assignment1.hs
-    source-dirs:         app
+    source-dirs:         src
     ghc-options:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
     - -main-is Assignment1
-    dependencies:
-    - UU-INFOFP
-
-tests:
-  UU-INFOFP-test:
-    main:                Spec.hs
-    source-dirs:         test
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - UU-INFOFP
