@@ -22,7 +22,7 @@ main = interact (unlines . exercise . lines)
 exercise :: [String] -> [String]
 exercise =
   printTable
-    . project ["last", "first", "salary"]
+    -- . project ["last", "first", "salary"]
     . select "gender" "male"
     . parseTable
 
@@ -70,18 +70,31 @@ printField i str
 -- * Exercise 4
 
 printRow :: [(Int, String)] -> String
-printRow = undefined
+printRow x = "|" ++ intercalate "|" (map (uncurry printField) x) ++ "|"
 
 -- * Exercise 5
 
+-- Table == [[String]]
+
 columnWidths :: Table -> [Int]
-columnWidths = undefined
+columnWidths = map maximum . transpose . map (map length)
+
+-- columnWidths table = map maximum (transpose (map (map length) table))
 
 -- * Exercise 6
 
 printTable :: Table -> [String]
+printTable [] = error "Table is empty!"
 printTable table@(header : rows) =
-  undefined
+  let colWidth = columnWidths table
+      separator = [printLine colWidth]
+   in separator
+        ++ [printRow (zip colWidth (strToUpper header))]
+        ++ separator
+        ++ map (printRow . zip colWidth) rows
+        ++ separator
+  where
+    strToUpper = map (map toUpper)
 
 -- | Querying
 
@@ -89,10 +102,19 @@ printTable table@(header : rows) =
 
 select :: Field -> Field -> Table -> Table
 select column value table@(header : rows) =
-  undefined
+  case elemIndex column header of
+    Just idx -> header : filter (p idx) rows
+    Nothing -> error ("Column " ++ value ++ " does not exist!")
+  where
+    p colIdx row = (row !! colIdx) == value
+select _ _ _ = undefined -- Stop complaining about incomplete patterns.
 
 -- * Exercise 8
 
-project :: [Field] -> Table -> Table
+-- project :: [Field] -> Table -> Table
+project :: [Field] -> Table -> [Int]
 project columns table@(header : _) =
-  undefined
+  mapMaybe getColumnIdx columns
+  where
+    getColumnIdx col = elemIndex col header
+project _ _ = undefined -- Stop complaining about incomplete patterns.
