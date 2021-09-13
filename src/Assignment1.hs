@@ -22,7 +22,7 @@ main = interact (unlines . exercise . lines)
 exercise :: [String] -> [String]
 exercise =
   printTable
-    -- . project ["last", "first", "salary"]
+    . project ["last", "first", "salary"]
     . select "gender" "male"
     . parseTable
 
@@ -111,10 +111,11 @@ select _ _ _ = undefined -- Stop complaining about incomplete patterns.
 
 -- * Exercise 8
 
--- project :: [Field] -> Table -> Table
-project :: [Field] -> Table -> [Int]
+project :: [Field] -> Table -> Table
 project columns table@(header : _) =
-  mapMaybe getColumnIdx columns
+  transpose (mapMaybe getColumn columns)
   where
-    getColumnIdx col = elemIndex col header
+    getColumn col = case elemIndex col header of
+      Just idx -> Just (map (!! idx) table)
+      Nothing -> Nothing
 project _ _ = undefined -- Stop complaining about incomplete patterns.
