@@ -73,5 +73,3 @@ take2 :: Int -> [a] -> [a]
 take2 0 _ = []
 take2 _ [] = []
 take2 n (x : xs) = x : take2 (n - 1) xs
-
--- type inference: `map . foldr`

@@ -24,18 +24,21 @@ data Rose a = MkRose a [Rose a]
 -- Exercise 1
 
 root :: Rose a -> a
-root = undefined
+root (MkRose x _) = x
 
 children :: Rose a -> [Rose a]
-children = undefined
+children (MkRose _ x) = x
 
 -- Exercise 2
+-- Should the root element also be counted?
 
 size :: Rose a -> Int
-size = undefined
+size (MkRose x xs) = length xs + sum (map size xs)
 
 leaves :: Rose a -> Int
-leaves = undefined
+leaves (MkRose x xs)
+  | null xs = 1
+  | otherwise = sum (map leaves xs)
 
 -- | State representation
 
@@ -51,7 +54,8 @@ instance Show Player where
 -- Exercise 3
 
 nextPlayer :: Player -> Player
-nextPlayer = undefined
+nextPlayer P1 = P2
+nextPlayer P2 = P1
 
 -- * Board
 
@@ -66,7 +70,8 @@ instance Show Field where
 -- Exercise 4
 
 symbol :: Player -> Field
-symbol = undefined
+symbol P1 = X
+symbol P2 = O
 
 type Row = (Field, Field, Field)
 
