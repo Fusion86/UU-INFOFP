@@ -104,7 +104,7 @@ select :: Field -> Field -> Table -> Table
 select column value table@(header : rows) =
   case elemIndex column header of
     Just idx -> header : filter (p idx) rows
-    Nothing -> error ("Column " ++ value ++ " does not exist!")
+    Nothing -> table
   where
     p colIdx row = (row !! colIdx) == value
 select _ _ _ = undefined -- Stop complaining about incomplete patterns.
