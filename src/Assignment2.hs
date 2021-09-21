@@ -30,13 +30,12 @@ children :: Rose a -> [Rose a]
 children (MkRose _ x) = x
 
 -- Exercise 2
--- Should the root element also be counted?
 
 size :: Rose a -> Int
-size (MkRose x xs) = length xs + sum (map size xs)
+size (MkRose _ xs) = 1 + sum (map size xs)
 
 leaves :: Rose a -> Int
-leaves (MkRose x xs)
+leaves (MkRose _ xs)
   | null xs = 1
   | otherwise = sum (map leaves xs)
 
@@ -80,20 +79,31 @@ type Board = (Row, Row, Row)
 -- Exercise 5
 
 verticals :: Board -> (Row, Row, Row)
-verticals = undefined
+verticals
+  ( (a, b, c),
+    (d, e, f),
+    (g, h, i)
+    ) = ((a, d, g), (b, e, h), (c, f, i))
 
 diagonals :: Board -> (Row, Row)
-diagonals = undefined
+diagonals
+  ( (a, b, c),
+    (d, e, f),
+    (g, h, i)
+    ) = ((a, e, i), (c, e, g))
 
 -- Exercise 6
 
 emptyBoard :: Board
-emptyBoard = undefined
+emptyBoard = ((B, B, B), (B, B, B), (B, B, B))
 
 -- Exercise 7
 
 printBoard :: Board -> String
-printBoard = undefined
+printBoard (a, b, c) = printRow a ++ "-+-+-\n" ++ printRow b ++ "-+-+-\n" ++ printRow c
+  where
+    printRow :: (Field, Field, Field) -> String
+    printRow (d, e, f) = show d ++ " | " ++ show e ++ " | " ++ show f ++ "\n"
 
 -- | Move generation
 
