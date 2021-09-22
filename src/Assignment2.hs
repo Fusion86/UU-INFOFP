@@ -109,8 +109,42 @@ printBoard (a, b, c) = printRow a ++ "-+-+-\n" ++ printRow b ++ "-+-+-\n" ++ pri
 
 -- Exercise 8
 
+-- tuplify :: [Field] -> Board
+-- tuplify [a, b, c, d, e, f, g, h, i] = ((a, b, c), (d, e, f), (g, h, i))
+-- tuplify _ = error "Not a valid board size."
+
+-- untuplify :: Board -> [Field]
+-- untuplify ((a, b, c), (d, e, f), (g, h, i)) = [a, b, c, d, e, f, g, h, i]
+
+-- moves :: Player -> Board -> [Board]
+-- moves p b = mapMaybe moveMaybe [0 .. 8]
+--   where
+--     moveMaybe :: Int -> Maybe Board
+--     moveMaybe i
+--       | untuplify b !! i == B = Just b
+--       | otherwise = Nothing
+
+-- -- moves :: Player -> Board -> [Board]
+-- -- moves p b = mapMaybe [b]
+-- --   where
+-- --     moveGen ((B, b, c), (d, e, f), (g, h, i)) = Just ((X,,),,)
+-- --     moveGen ((a, B, c), (d, e, f), (g, h, i)) = Just ((,X,),,)
+-- --     moveGen b = Nothing
+
 moves :: Player -> Board -> [Board]
-moves = undefined
+moves p ((a, b, c), (d, e, f), (g, h, i)) =
+  move a ((s, b, c), (d, e, f), (g, h, i))
+    ++ move b ((a, s, c), (d, e, f), (g, h, i))
+    ++ move c ((a, b, s), (d, e, f), (g, h, i))
+    ++ move d ((a, b, c), (s, e, f), (g, h, i))
+    ++ move e ((a, b, c), (d, s, f), (g, h, i))
+    ++ move f ((a, b, c), (d, e, s), (g, h, i))
+    ++ move g ((a, b, c), (d, e, f), (s, h, i))
+    ++ move h ((a, b, c), (d, e, f), (g, s, i))
+    ++ move i ((a, b, c), (d, e, f), (g, h, s))
+  where
+    s = symbol p
+    move c m = [m | c == B]
 
 -- | Gametree generation
 
