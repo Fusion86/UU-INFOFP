@@ -121,8 +121,10 @@ printBoard (a, b, c) = printRow a ++ "-+-+-\n" ++ printRow b ++ "-+-+-\n" ++ pri
 --   where
 --     moveMaybe :: Int -> Maybe Board
 --     moveMaybe i
---       | untuplify b !! i == B = Just b
+--       | untuplify b !! i == B = Just (tuplify (take (i-1) board ++ [symbol p] ++ drop i board))
 --       | otherwise = Nothing
+--       where
+--         board = untuplify b
 
 -- -- moves :: Player -> Board -> [Board]
 -- -- moves p b = mapMaybe [b]
