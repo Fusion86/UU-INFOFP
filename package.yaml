@@ -1,14 +1,14 @@
-name:                UU-INFOFP
-version:             0.1.0.0
-github:              "Fusion86/UU-INFOFP"
-license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2021 Author name here"
+name: UU-INFOFP
+version: 0.1.0.0
+github: "Fusion86/UU-INFOFP"
+license: BSD3
+author: "Author name here"
+maintainer: "example@example.com"
+copyright: "2021 Author name here"
 
 extra-source-files:
-- README.md
-- ChangeLog.md
+  - README.md
+  - ChangeLog.md
 
 # Metadata used when publishing your package
 # synopsis:            Short description of your package
@@ -17,46 +17,46 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/Fusion86/UU-INFOFP#readme>
+description: Please see the README on GitHub at <https://github.com/Fusion86/UU-INFOFP#readme>
 
 dependencies:
-- base >= 4.7 && < 5
+  - base >= 4.7 && < 5
 
 library:
   source-dirs: src
 
 executables:
   000-Main:
-    main:                Main.hs
-    source-dirs:         src
+    main: Main.hs
+    source-dirs: src
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
 
   Assignment0:
-    main:                Assignment0.hs
-    source-dirs:         src
+    main: Assignment0.hs
+    source-dirs: src
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    - -main-is Assignment0
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+      - -main-is Assignment0
 
   Assignment1:
-    main:                Assignment1.hs
-    source-dirs:         src
+    main: Assignment1.hs
+    source-dirs: src
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    - -main-is Assignment1
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+      - -main-is Assignment1
 
   Assignment2:
-    main:                Assignment2.hs
-    source-dirs:         src
+    main: Assignment2.hs
+    source-dirs: src
     ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    - -main-is Assignment2
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+      - -main-is Assignment2
