@@ -151,7 +151,29 @@ moves p ((a, b, c), (d, e, f), (g, h, i)) =
 -- Exercise 9
 
 hasWinner :: Board -> Maybe Player
-hasWinner = undefined
+hasWinner
+  ( (a, b, c),
+    (d, e, f),
+    (g, h, i)
+    )
+    -- Horizontal
+    | check a b c = getPlayer a
+    | check d e f = getPlayer d
+    | check g h i = getPlayer g
+    -- Vertical
+    | check a d g = getPlayer a
+    | check b e h = getPlayer b
+    | check c f i = getPlayer c
+    -- Diagonal
+    | check a e i = getPlayer a
+    | check c e g = getPlayer c
+    | otherwise = Nothing
+    where
+      check a b c = a == b && b == c && a /= B
+      getPlayer X = Just P1
+      getPlayer O = Just P2
+      -- Could also return Nothing, but for logic checking we'll have it throw an error.
+      getPlayer B = error "Blank space doesn't have a player."
 
 -- Exercise 10
 
