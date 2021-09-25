@@ -35,9 +35,8 @@ size :: Rose a -> Int
 size (MkRose _ xs) = 1 + sum (map size xs)
 
 leaves :: Rose a -> Int
-leaves (MkRose _ xs)
-  | null xs = 1
-  | otherwise = sum (map leaves xs)
+leaves (MkRose _ []) = 1
+leaves (MkRose _ xs) = sum (map leaves xs)
 
 -- | State representation
 
@@ -202,14 +201,15 @@ minimax p = minimax' p p
 
 minimax' :: Player -> Player -> Rose Board -> Rose Int
 minimax' player currentPlayer (MkRose board []) = case hasWinner board of
-  Just winner -> if winner == player then MkRose 1 [] else MkRose (-1) [] -- Either a win or a loss
+  Just winner | winner == player -> MkRose 1 []
+  Just winner -> MkRose (-1) []
   Nothing -> MkRose 0 [] -- Draw
-minimax' player currentPlayer (MkRose b bs) =
-  let nodes = map (minimax' player (nextPlayer currentPlayer)) bs
-      scores = map root nodes
-   in if player == currentPlayer
-        then MkRose (maximum' scores) nodes
-        else MkRose (minimum' scores) nodes
+minimax' player currentPlayer (MkRose b bs)
+  | player == currentPlayer = MkRose (maximum' scores) nodes
+  | otherwise = MkRose (minimum' scores) nodes
+  where
+    nodes = map (minimax' player (nextPlayer currentPlayer)) bs
+    scores = map root nodes
 
 -- * Lazier minimum and maximums
 
@@ -238,9 +238,24 @@ maximum' (x : xs) = f x xs
 -- | Gameplay
 
 -- Exercise 14
+-- Not ideal.
 
 makeMove :: Player -> Board -> Maybe Board
-makeMove = undefined
+makeMove p b =
+  let moves = gameTree p b
+      scores = minimax p moves
+      moveScores = zip (map root (children scores)) (map root (children moves))
+   in bestMove moveScores
+  where
+    bestMove :: [(Int, Board)] -> Maybe Board
+    bestMove [] = Nothing
+    bestMove lst@(x : _) = Just (bestMove' x lst)
+
+    bestMove' :: (Int, Board) -> [(Int, Board)] -> Board
+    bestMove' (bestScore, bestMove) [] = bestMove
+    bestMove' (bestScore, bestMove) ((score, move) : xs)
+      | score > bestScore = bestMove' (score, move) xs
+      | otherwise = bestMove' (bestScore, bestMove) xs
 
 -- | Main
 data PlayerType = Human | Computer
