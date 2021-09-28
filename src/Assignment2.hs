@@ -145,7 +145,16 @@ moves p ((a, b, c), (d, e, f), (g, h, i)) =
     ++ move i ((a, b, c), (d, e, f), (g, h, s))
   where
     s = symbol p
+    -- See the comments below for the explanation of the move function.
     move c m = [m | c == B]
+
+-- c = the current value of the spot where we want to place a new symbol
+-- m = the new board state after the move
+-- We'll check whether c is a blank spot, and if it is we return the new board state.
+-- If it is not a blank spot then this move is not possible, and thus we return an empty array.
+-- move c m
+--   | c == B = [m]
+--   | otherwise = []
 
 -- | Gametree generation
 
