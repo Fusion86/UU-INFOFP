@@ -107,3 +107,56 @@ elemTree (Node l x r) a
   | a < x = elemTree l x
   | a == x = True
   | otherwise = elemTree r x
+
+merge :: Ord a => [a] -> [a] -> [a]
+merge [] ys = ys
+merge xs [] = xs
+merge (x : xs) (y : ys)
+  | x < y = x : merge xs (y : ys)
+  | otherwise = y : merge (x : xs) ys
+
+halve :: [a] -> ([a], [a])
+halve xs =
+  let len = length xs `div` 2
+   in (take len xs, drop len xs)
+
+mergeSort :: Ord a => [a] -> [a]
+mergeSort [a] = [a]
+mergeSort xx =
+  let (xs, ys) = halve xx
+   in merge (mergeSort xs) (mergeSort ys)
+
+data Pair a b = MkPair a b
+
+getA :: Pair a b -> a
+getA (MkPair a _) = a
+
+getB :: Pair a b -> b
+getB (MkPair _ b) = b
+
+-- !!!!!!
+instance Eq b => Eq (Pair a b) where
+  MkPair _ a == MkPair _ b = a == b
+
+instance Ord b => Ord (Pair a b) where
+  MkPair _ a <= MkPair _ b = a <= b
+
+sortOn :: Ord b => (a -> b) -> [a] -> [a]
+sortOn f xs = map getA (mergeSort (map makePair xs))
+  where
+    makePair x = MkPair x (f x)
+
+any' :: (a -> Bool) -> [a] -> Bool
+any' p = foldr f x0
+  where
+    f a b
+      | p a = True
+      | otherwise = b
+    x0 = False
+
+partition :: (a -> Bool) -> [a] -> ([a], [a])
+partition p xs = (mapMaybe (f True) xs, mapMaybe (f False) xs)
+  where
+    f wanted x
+      | p x == wanted = Just x
+      | otherwise = Nothing
