@@ -107,3 +107,66 @@ elemTree (Node l x r) a
   | a < x = elemTree l x
   | a == x = True
   | otherwise = elemTree r x
+
+myFilter :: (a -> Bool) -> [a] -> [a]
+myFilter _ [] = []
+myFilter f (x : xs)
+  | f x = x : myFilter f xs
+  | otherwise = myFilter f xs
+
+elementAt :: [a] -> Int -> a
+elementAt xs i = xs !! (i - 1)
+
+allPairs :: [a] -> [(a, a)]
+allPairs lst = allPairs' lst lst
+  where
+    allPairs' :: [a] -> [a] -> [(a, a)]
+    allPairs' _ [] = []
+    allPairs' x (y : ys) = map pair x ++ allPairs' x ys
+      where
+        pair z = (y, z)
+
+dropEvery :: [a] -> Int -> [a]
+dropEvery [] _ = []
+dropEvery xs y = take (y -1) xs ++ dropEvery (drop y xs) y
+
+multipleFS :: Int -> Bool
+multipleFS x
+  | x `mod` 5 == 0 = True
+  | x `mod` 7 == 0 = True
+  | otherwise = False
+
+em1 :: [Int] -> [Int]
+em1 [] = []
+em1 (x : xs)
+  | multipleFS x = em1 xs
+  | otherwise = x : em1 xs
+
+em2 :: [Int] -> [Int]
+em2 xs = [x | x <- xs, not $ multipleFS x]
+
+em3 :: [Int] -> [Int]
+em3 xs = filter (not . multipleFS) xs
+
+data Op = Plus | Minus | Multiply | Divide deriving (Enum)
+
+data Expr a = Const a | Binary Op (Expr a) (Expr a)
+
+-- instance Show (Expr a) where
+-- show (Const a) = show a
+-- show (Binary op a b) = "(" ++ show a ++ show op ++ show b ++ ")"
+
+data Example = Example Int
+
+instance Eq Example where
+  (Example x) == (Example y) = x == y
+
+instance Show Example where
+  show (Example a) = show a
+
+splits :: [a] -> [a]
+splits (x : y : ys) = undefined
+
+plus' :: Nat -> Nat -> Nat
+plus' Zero n = n
+plus' (Succ m) n = Succ (plus' m n)
