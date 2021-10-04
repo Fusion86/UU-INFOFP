@@ -1,3 +1,5 @@
+import Data.Maybe (mapMaybe)
+
 -- Chapter 2 Exercises
 
 n = a `div` length ns
@@ -222,3 +224,9 @@ splits (x : y : ys) = undefined
 plus' :: Nat -> Nat -> Nat
 plus' Zero n = n
 plus' (Succ m) n = Succ (plus' m n)
+
+oneAfterEach :: (Int -> Bool) -> Int -> [Int] -> [Int]
+oneAfterEach _ _ [] = []
+oneAfterEach p v (x:xs) 
+  | p x = [x, v] ++ oneAfterEach p v xs
+  | otherwise = x : oneAfterEach p v xs 
