@@ -1,3 +1,4 @@
+import Data.List (intercalate)
 import Data.Maybe (mapMaybe)
 
 -- Chapter 2 Exercises
@@ -162,6 +163,7 @@ partition p xs = (mapMaybe (f True) xs, mapMaybe (f False) xs)
     f wanted x
       | p x == wanted = Just x
       | otherwise = Nothing
+
 myFilter :: (a -> Bool) -> [a] -> [a]
 myFilter _ [] = []
 myFilter f (x : xs)
@@ -227,6 +229,57 @@ plus' (Succ m) n = Succ (plus' m n)
 
 oneAfterEach :: (Int -> Bool) -> Int -> [Int] -> [Int]
 oneAfterEach _ _ [] = []
-oneAfterEach p v (x:xs) 
+oneAfterEach p v (x : xs)
   | p x = [x, v] ++ oneAfterEach p v xs
-  | otherwise = x : oneAfterEach p v xs 
+  | otherwise = x : oneAfterEach p v xs
+
+putStr2 :: String -> IO ()
+putStr2 s = sequence_ . map putChar $ s
+
+-- putStr2 s = (sequence_ . map putChar) s
+
+-- return (f a b)
+-- return $ f a b
+
+adder :: IO ()
+adder = do
+  count <- askNumber "How many numbers to add? "
+  total <- askNumbers count 0
+  putStrLn $ "Total: " ++ show total
+  where
+    askNumber :: String -> IO Int
+    askNumber s = do
+      putStr s
+      line <- getLine
+      pure (read line :: Int)
+    askNumbers :: Int -> Int -> IO Int
+    askNumbers 0 acc = pure acc
+    askNumbers x acc = do
+      number <- askNumber "Gimme a number plox: "
+      askNumbers (x - 1) (acc + number)
+
+adder2 :: IO ()
+adder2 = do
+  count <- askNumber "How many numbers to add? "
+  x <- sequence $ replicate count (getLine >>= (pure . read))
+  putStrLn $ "Total: " ++ show (sum x)
+  where
+    askNumber :: String -> IO Int
+    askNumber s = do
+      putStr s
+      line <- getLine
+      pure (read line :: Int)
+
+    askNumber2 :: IO Int
+    askNumber2 = do
+      line <- getLine
+      pure (read line :: Int)
+
+mapTree :: (a->b) -> Tree a -> Tree b
+mapTree f Leaf = Leaf (f a)
+mapTree f (Node l v r) = Node (mapTree f l) (f v) (mapTree f r)
+
+fmap :: (a->b) -> IO a -> IO b
+fmap f a = do 
+  a' <- a
+  return $ f a

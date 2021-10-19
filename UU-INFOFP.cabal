@@ -27,6 +27,7 @@ library
       Assignment0
       Assignment1
       Assignment2
+      Assignment4
       Main
   other-modules:
       Paths_UU_INFOFP
@@ -34,6 +35,7 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , containers
   default-language: Haskell2010
 
 executable 000-Main
@@ -42,12 +44,14 @@ executable 000-Main
       Assignment0
       Assignment1
       Assignment2
+      Assignment4
       Paths_UU_INFOFP
   hs-source-dirs:
       src
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , containers
   default-language: Haskell2010
 
 executable Assignment0
@@ -55,6 +59,7 @@ executable Assignment0
   other-modules:
       Assignment1
       Assignment2
+      Assignment4
       Main
       Paths_UU_INFOFP
   hs-source-dirs:
@@ -62,6 +67,7 @@ executable Assignment0
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -main-is Assignment0
   build-depends:
       base >=4.7 && <5
+    , containers
   default-language: Haskell2010
 
 executable Assignment1
@@ -69,6 +75,7 @@ executable Assignment1
   other-modules:
       Assignment0
       Assignment2
+      Assignment4
       Main
       Paths_UU_INFOFP
   hs-source-dirs:
@@ -76,6 +83,7 @@ executable Assignment1
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -main-is Assignment1
   build-depends:
       base >=4.7 && <5
+    , containers
   default-language: Haskell2010
 
 executable Assignment2
@@ -83,6 +91,7 @@ executable Assignment2
   other-modules:
       Assignment0
       Assignment1
+      Assignment4
       Main
       Paths_UU_INFOFP
   hs-source-dirs:
@@ -90,4 +99,21 @@ executable Assignment2
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -main-is Assignment2
   build-depends:
       base >=4.7 && <5
+    , containers
+  default-language: Haskell2010
+
+executable Assignment4
+  main-is: Assignment4.hs
+  other-modules:
+      Assignment0
+      Assignment1
+      Assignment2
+      Main
+      Paths_UU_INFOFP
+  hs-source-dirs:
+      src
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -main-is Assignment4
+  build-depends:
+      base >=4.7 && <5
+    , containers
   default-language: Haskell2010
