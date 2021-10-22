@@ -74,7 +74,19 @@ data Rank = R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9 | R10 | J | Q | K | A
 -- * Exercise 6
 
 instance Show Rank where
-  show = undefined
+  show R2 = "2"
+  show R3 = "3"
+  show R4 = "4"
+  show R5 = "5"
+  show R6 = "6"
+  show R7 = "7"
+  show R8 = "8"
+  show R9 = "9"
+  show R10 = "10"
+  show J = "J"
+  show Q = "Q"
+  show K = "K"
+  show A = "A"
 
 data Suit = S | H | D | C
   deriving (Bounded, Enum, Eq, Ord, Show)
@@ -85,15 +97,20 @@ data Card = Card {rank :: Rank, suit :: Suit}
 -- * Exercise 7
 
 instance Show Card where
-  show (Card {rank = r, suit = s}) = undefined
+  show Card {rank = r, suit = s} = show r ++ show s
 
 type Deck = [Card]
 
 -- * Exercise 8
 
-fullDeck, piquetDeck :: Deck
-fullDeck = undefined
-piquetDeck = undefined
+fullDeck :: Deck
+fullDeck = [Card r s | r <- ranks, s <- suits]
+  where
+    suits = [minBound :: Suit .. maxBound :: Suit]
+    ranks = [minBound :: Rank .. maxBound :: Rank]
+
+piquetDeck :: Deck
+piquetDeck = filter ((>= R7) . rank) fullDeck
 
 newtype Hand = Hand {unHand :: [Card]} deriving (Eq, Show)
 
@@ -112,42 +129,96 @@ data HandCategory
 -- * Exercise 9
 
 sameSuits :: Hand -> Bool
-sameSuits = undefined
+sameSuits (Hand []) = True
+sameSuits (Hand (Card _ s : cs)) = all ((== s) . suit) cs
 
 -- * Exercise 10
 
+-- Answer is based on https://gist.github.com/halter73/750588/ee28475e82a3ffa3cc21f23a408223745733ca1f
+-- because I couldn't figure it out on my own.
+
 isStraight :: [Rank] -> Maybe Rank
-isStraight = undefined
+isStraight cs
+  | sorted == [R2, R3, R4, R5, A] = Just R5
+  | sorted == take 5 [head sorted ..] = Just $ sorted !! 4
+  | otherwise = Nothing
+  where
+    sorted = sort cs
 
 -- * Exercise 11
 
 ranks :: Hand -> [Rank]
-ranks = undefined
+ranks = reverse . sort . map rank . unHand
 
 -- * Exercise 12
 
+groupToTupList :: [[a]] -> [(Int, a)]
+groupToTupList = map f
+  where
+    f :: [a] -> (Int, a)
+    f x = (length x, head x)
+
 order :: Hand -> [(Int, Rank)]
-order = undefined
+order = reverse . sort . groupToTupList . group . ranks
 
 -- * Exercise 13
 
+-- Terrible code, but it works.
+
 handCategory :: Hand -> HandCategory
-handCategory = undefined
+handCategory h@(Hand cs)
+  -- Straight flush
+  | Just rank <- isStraight rks, sameSuits h = StraightFlush rank
+  -- Four of a kind
+  | Just x <- fourOfAKind = x
+  -- Full house
+  | fst (head ord) == 3 && fst (last ord) == 2 = FullHouse (snd (head ord)) (snd (last ord))
+  -- Flush
+  | fst (head suitTupList) == 5 = Flush rks
+  -- Straight
+  | Just rank <- isStraight rks = Straight rank
+  -- Three of a kind
+  | fst (head ord) == 3 = ThreeOfAKind (snd (head ord)) (snd (ord !! 1)) (snd (last ord))
+  -- Two pair
+  | Just x <- twoPair = x
+  -- One pair
+  | Just x <- onePair = x
+  -- High card
+  | otherwise = HighCard rks -- TODO: Sort
+  where
+    rks = ranks h
+    ord = order h
+    sts = map suit cs
+    suitTupList = groupToTupList (group sts)
+
+    fourOfAKind
+      | fst (head ord) == 4 = Just $ FourOfAKind (snd (head ord)) (snd (last ord))
+      | otherwise = Nothing
+
+    twoPair
+      | length ord == 3 = Just $ TwoPair (snd $ head ord) (snd $ ord !! 1) (snd $ ord !! 2)
+      | otherwise = Nothing
+
+    onePair
+      | fst (head ord) == 2 = Just $ OnePair (snd (head ord)) (map snd (drop 1 ord))
+      | otherwise = Nothing
 
 -- * Exercise 14
 
 instance Ord Hand where
-  compare = undefined
+  a `compare` b = handCategory a `compare` handCategory b
 
 -- * Exercise 15
 
 combs :: Int -> [a] -> [[a]]
-combs = undefined
+combs 0 _ = [[]]
+combs _ [] = []
+combs n (x : xs) = map (x :) (combs (n - 1) xs) ++ combs n xs
 
 -- * Exercise 16
 
 allHands :: Deck -> [Hand]
-allHands = undefined
+allHands = map Hand . combs 5
 
 -- * Exercise 17
 
