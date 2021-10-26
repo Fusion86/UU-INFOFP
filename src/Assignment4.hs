@@ -13,7 +13,7 @@ import Prelude hiding (Monoid, mempty, foldMap, Foldable)
 #endif
 
 import Data.List (foldl', group, sort)
-import Data.Set (Set, empty, insert)
+import Data.Set (Set, empty, fromList, insert)
 
 -- | Containers
 data Rose a = MkRose a [Rose a]
@@ -50,7 +50,7 @@ class Functor f => Foldable f where
   fold :: Monoid m => f m -> m
   foldMap :: Monoid m => (a -> m) -> f a -> m
   -- * Exercise 4
-  foldMap = undefined
+  foldMap f fa = fold (fmap f fa)
 
 instance Foldable [] where
   fold = foldr (<>) mempty
@@ -58,14 +58,15 @@ instance Foldable [] where
 -- * Exercise 3
 
 instance Foldable Rose where
-  fold (MkRose x []) = x
-  fold (MkRose x (y : ys)) = x <> fold y <> foldMap fold ys
+  fold r = fold (f r [])
+    where
+      f (MkRose a as) xs = a : foldr f xs as
 
 -- * Exercise 5
 
 fsum, fproduct :: (Foldable f, Num a) => f a -> a
-fsum = undefined
-fproduct = undefined
+fsum = unSum . foldMap Sum
+fproduct = unProduct . foldMap Product
 
 -- | Poker
 data Rank = R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9 | R10 | J | Q | K | A
@@ -164,6 +165,7 @@ order = reverse . sort . groupToTupList . group . ranks
 -- * Exercise 13
 
 -- Terrible code, but it works.
+-- See below for a better solution.
 
 handCategory :: Hand -> HandCategory
 handCategory h@(Hand cs)
@@ -203,6 +205,22 @@ handCategory h@(Hand cs)
       | fst (head ord) == 2 = Just $ OnePair (snd (head ord)) (map snd (drop 1 ord))
       | otherwise = Nothing
 
+-- This is a better solution though.
+-- Taken from https://github.com/haroldcarr/learn-haskell-coq-ml-etc/blob/master/haskell/course/2014-07-utrecht/src/Assignment3.hs
+-- handCategory :: Hand -> HandCategory
+-- handCategory h =
+--     let rh = ranks h
+--     in case isStraight rh of
+--         Just hc -> if sameSuits h then StraightFlush hc else Straight hc
+--         Nothing ->
+--             case order h of
+--                 [_     ,_      ,_      ,_      ,_ ] -> if sameSuits h then Flush rh else HighCard    rh
+--                 [(4,r4),(1,r1) ]                    -> FourOfAKind  r4 r1
+--                 [(3,r3),(2,r2) ]                    -> FullHouse    r3 r2
+--                 [(3,r3),(1,r1) ,(1,r1')]            -> ThreeOfAKind r3 r1  r1'
+--                 [(2,r2),(2,r2'),(1,r1) ]            -> TwoPair      r2 r2' r1
+--                 [(2,r2),(1,r1) ,(1,r1'),(1,rr)]     -> OnePair      r2 [r1,r1',rr]
+
 -- * Exercise 14
 
 instance Ord Hand where
@@ -223,7 +241,7 @@ allHands = map Hand . combs 5
 -- * Exercise 17
 
 distinctHands :: Deck -> Set Hand
-distinctHands = undefined
+distinctHands = fromList . allHands
 
 -- * Question 1
 
