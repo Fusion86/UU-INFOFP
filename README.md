@@ -1,3 +1,3 @@
 # UU-INFOFP
 
-My homework for some uni course. I don't really understand much so I wouldn't recommend copying from here.
+My homework for some uni course. I wrote this code before I even knew what haskell is, so it's pretty bad.

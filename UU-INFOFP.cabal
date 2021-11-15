@@ -12,11 +12,10 @@ bug-reports:    https://github.com/Fusion86/UU-INFOFP/issues
 author:         Author name here
 maintainer:     example@example.com
 copyright:      2021 Author name here
-license:        BSD3
+license:        OtherLicense
 build-type:     Simple
 extra-source-files:
     README.md
-    ChangeLog.md
 
 source-repository head
   type: git
